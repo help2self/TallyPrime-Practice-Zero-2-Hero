@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="hi"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TallyPrime Practice — Scholar Computer Institute</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#000;--card:#12172A;--line:#2C3348;--ink:#EEF0FA;--mut:#9AA0C0;--a:#8C6BFF;--b:#22D6CC;--gold:#E8B94A;--ok:#2ED888}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 Inter,'Noto Sans Devanagari',sans-serif}
+.w{max-width:920px;margin:0 auto;padding:16px 16px 80px}
+.brand{text-align:center;padding:26px 8px 6px;color:var(--gold);font-weight:700;letter-spacing:2px;font-size:13px;text-transform:uppercase}
+h1.t{font-family:Fraunces,serif;text-align:center;font-size:clamp(26px,5vw,36px);margin:6px 0 4px}h1.t span{color:#FF6B7A}
+.sub{text-align:center;color:var(--mut);margin:0 0 18px}
+input.s{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:16px;margin-bottom:8px}
+.part{color:var(--gold);font-weight:700;margin:22px 0 8px}
+.cc{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:8px 0;color:inherit;text-decoration:none}
+.cc:hover{border-color:var(--a)}.cn{font-weight:700;color:var(--b);min-width:34px}.ct2{flex:1}.cm{color:var(--mut);font-size:13px;white-space:nowrap}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:16px 0}
+.card.done{border-color:var(--ok)}.card h3{margin:0 0 6px;font-family:Fraunces,'Noto Sans Devanagari',serif;font-size:20px}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+button,.nb{font:600 14px Inter,'Noto Sans Devanagari',sans-serif;padding:9px 14px;border-radius:10px;border:1px solid var(--line);background:#1A2038;color:var(--ink);cursor:pointer;text-decoration:none}
+button.on{background:linear-gradient(90deg,var(--a),var(--b));color:#000;border:0}
+.rv{border-top:1px dashed var(--line);margin-top:12px;padding-top:10px}.rv.h{border-left:3px solid var(--gold);padding-left:12px}.rv.f{border-left:3px solid var(--ok);padding-left:12px}
+.tw{overflow-x:auto;margin:10px 0}table{border-collapse:collapse;width:100%;min-width:420px;font-size:14px}th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}th{background:#1A2038;color:var(--gold)}
+.callout{background:#0B1020;border:1px solid var(--line);border-left:4px solid var(--b);border-radius:10px;padding:10px 14px;margin:10px 0}.callout p{margin:4px 0}.ct{display:block;color:var(--b)}
+.diff{font-weight:700;margin:4px 0}h2,h3,h4,h5{line-height:1.3}ul{padding-left:22px}
+.top{display:flex;justify-content:space-between;gap:8px;margin:10px 0;flex-wrap:wrap}a{color:var(--b)}
+details{margin:12px 0}summary{cursor:pointer;font-weight:600;color:var(--gold)}
+.foot{text-align:center;color:var(--mut);font-size:12px;margin-top:40px}
+</style></head><body><div class="w" id="app"></div>
+<script>
+const $=document.getElementById('app'),K='scii_done';
+const done=()=>{try{return JSON.parse(localStorage.getItem(K)||'{}')}catch(e){return {}}};
+const save=d=>{try{localStorage.setItem(K,JSON.stringify(d))}catch(e){}};
+const head='<div class="brand">Scholar Computer Institute</div><p class="sub" style="margin:0">Nizamabad – Azamgarh</p><h1 class="t">TallyPrime <span>Practice</span></h1>';
+let IDX=null;
+async function j(u){const r=await fetch(u);if(!r.ok)throw 0;return r.json()}
+async function home(){
+  IDX=IDX||await j('index.json');const d=done();
+  let h=head+'<p class="sub">हर problem हल कीजिए — अटक जाएँ तो उसी के नीचे संकेत और हल देखिए।</p><input class="s" id="q" placeholder="Chapter खोजिए…">';let p='';
+  IDX.forEach(c=>{if(c.part!==p){p=c.part;h+='<div class="part" data-part>'+p+'</div>'}
+    const n=Object.keys(d).filter(k=>k.startsWith(c.num+'-')).length;
+    h+='<a class="cc" href="#/ch/'+c.num+'"><span class="cn">'+c.num+'</span><span class="ct2">'+c.title+'</span><span class="cm">'+n+'/'+c.count+'</span></a>'});
+  $.innerHTML=h+'<div class="foot">© Scholar Computer Institute, Nizamabad – Azamgarh</div>';
+  document.getElementById('q').oninput=e=>{const v=e.target.value.toLowerCase();document.querySelectorAll('.cc').forEach(a=>a.style.display=a.textContent.toLowerCase().includes(v)?'':'none')}}
+async function chapter(num){
+  const c=await j('ch'+num+'.json');IDX=IDX||await j('index.json');
+  const i=IDX.findIndex(x=>x.num===num),pv=IDX[i-1],nx=IDX[i+1],d=done();
+  let h='<div class="top"><a class="nb" href="#/">← सभी Chapters</a></div><div class="part">'+c.part+'</div><h1 class="t" style="text-align:left">Chapter '+num+': '+c.title+'</h1>'+c.intro;
+  if(c.guide)h+='<details><summary>📖 इस Chapter का मार्गदर्शन (Solution की भूमिका)</summary>'+c.guide+'</details>';
+  c.problems.forEach(p=>{const k=num+'-'+p.n;
+    h+='<div class="card'+(d[k]?' done':'')+'" id="p'+p.n+'"><h3>Problem '+p.n+' — '+p.title+'</h3>'+p.q+'<div class="btns">'+
+    (p.hint?'<button data-r="h">💡 संकेत देखें</button>':'')+(p.full?'<button data-r="f">✅ पूरा हल देखें</button>':'')+'<button data-d="'+k+'">'+(d[k]?'☑ हो गई':'☐ हो गई?')+'</button></div>'+
+    '<div class="rv h" hidden>'+p.hint+'</div><div class="rv f" hidden>'+p.full+'</div></div>'});
+  h+=c.outro+(c.solOutro?'<details><summary>📌 Chapter के अंत की टिप्पणी</summary>'+c.solOutro+'</details>':'');
+  h+='<div class="top">'+(pv?'<a class="nb" href="#/ch/'+pv.num+'">← Ch '+pv.num+'</a>':'<span></span>')+(nx?'<a class="nb" href="#/ch/'+nx.num+'">Ch '+nx.num+' →</a>':'')+'</div>';
+  $.innerHTML=h;
+  $.querySelectorAll('.card').forEach(cd=>{cd.querySelectorAll('.rv').forEach(r=>{if(!r.innerHTML.trim())r.remove()});
+    cd.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{const r=cd.querySelector('.rv.'+b.dataset.r);r.hidden=!r.hidden;b.classList.toggle('on',!r.hidden)});
+    const db=cd.querySelector('[data-d]');db.onclick=()=>{const s=done(),k=db.dataset.d;s[k]?delete s[k]:s[k]=1;save(s);cd.classList.toggle('done',!!s[k]);db.textContent=s[k]?'☑ हो गई':'☐ हो गई?'}});
+  window.scrollTo(0,0)}
+async function route(){const m=location.hash.match(/#\/ch\/(\d+)/);try{m?await chapter(m[1]):await home()}catch(e){$.innerHTML=head+'<p class="sub">डेटा नहीं खुल पाया। पेज को GitHub Pages (या किसी server) से खोलिए, सीधे फ़ाइल से नहीं।</p>'}}
+addEventListener('hashchange',route);route();
+</script></body></html>
