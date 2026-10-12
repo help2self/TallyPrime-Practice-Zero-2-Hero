@@ -79,6 +79,7 @@ async function chapter(num){
   cards.forEach((cd,ix)=>{
     cd.querySelectorAll('.rv').forEach(r=>{if(!r.innerHTML.trim())r.remove()});
     const hd=cd.querySelector('.ch');hd.onclick=()=>toggle(cd,!cd.classList.contains('open'));hd.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();hd.onclick()}};
+    cd.querySelector('.cb').addEventListener('click',e=>{if(e.target.closest('button,a,summary,input'))return;const sel=window.getSelection&&window.getSelection().toString();if(sel)return;toggle(cd,false);cd.scrollIntoView({block:'start'})});
     cd.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{const r=cd.querySelector('.rv.'+b.dataset.r);r.hidden=!r.hidden;b.classList.toggle('on',!r.hidden)});
     const db=cd.querySelector('[data-d]');db.onclick=()=>{const s=done(),k=db.dataset.d;s[k]?delete s[k]:s[k]=1;save(s);const on=!!s[k];
       cd.classList.toggle('done',on);db.textContent=on?'☑ Done':'☐ Done';cd.querySelector('.tk').textContent=on?'☑':'';
