@@ -27,7 +27,7 @@ button.on{background:linear-gradient(90deg,var(--a),var(--b));color:#000;border:
 details{margin:12px 0}summary{cursor:pointer;font-weight:600;color:var(--gold)}
 .foot{text-align:center;color:var(--mut);font-size:12px;margin-top:40px}
 .ch{display:flex;gap:10px;align-items:center;cursor:pointer}.pt{flex:1;font-family:Fraunces,'Noto Sans Devanagari',serif;font-size:17px;font-weight:600}.bd{font-size:12px;color:var(--mut);white-space:nowrap}.tk{color:var(--ok);min-width:14px}.ar{color:var(--mut);transition:transform .2s}.card.open .ar{transform:rotate(180deg)}.card.open{border-color:var(--a)}.cb{margin-top:12px;border-top:1px dashed var(--line);padding-top:10px}.card{margin:10px 0;padding:14px 16px}details.fold{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:10px 0}details.fold>summary{font-size:15px}details.fold[open]>summary{margin-bottom:8px}
-</style></head><body><div class="w" id="app"></div>
+#nav{position:fixed;right:14px;bottom:calc(18px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:8px;z-index:50}#nav button{width:44px;height:44px;border-radius:50%;padding:0;font-size:20px;background:#1A2038;border:1px solid var(--a);color:var(--ink);box-shadow:0 2px 10px #0008}#nav button[hidden]{display:none}</style></head><body><div class="w" id="app"></div><div id="nav"><button id="dn" aria-label="Go to bottom">↓</button><button id="up" aria-label="Go to top">↑</button></div>
 <script>
 const $=document.getElementById('app'),K='scii_done';
 const done=()=>{try{return JSON.parse(localStorage.getItem(K)||'{}')}catch(e){return {}}};
@@ -70,10 +70,11 @@ async function chapter(num){
   let h='<div class="top"><a class="nb" href="#/">← All Chapters</a><span class="cm" id="prog">'+n+'/'+c.problems.length+' Done</span></div><div class="part">'+c.part+'</div><h1 class="t" style="text-align:left">Chapter '+num+': '+c.title+'</h1><div id="intro"></div>';
   if(c.guide)h+='<details class="fold"><summary>📖 Chapter Guide</summary>'+c.guide+'</details>';
   h+=c.problems.map(p=>card(num,p,d)).join('');
-  h+='<div id="outro"></div>'+(c.solOutro?'<details class="fold"><summary>📌 Chapter Notes</summary>'+c.solOutro+'</details>':'');
+  h+='<div id="outro"></div>'+(c.solOutro?'<details class="fold" id="notes"><summary>📌 Chapter Notes</summary>'+c.solOutro+'</details>':'');
   h+='<div class="top">'+(pv?'<a class="nb" href="#/ch/'+pv.num+'">← Ch '+pv.num+'</a>':'<span></span>')+(nx?'<a class="nb" href="#/ch/'+nx.num+'">Ch '+nx.num+' →</a>':'')+'</div>';
   $.innerHTML=h;document.getElementById('intro').appendChild(fold(c.intro));
   if(c.outro){const o=document.getElementById('outro');o.appendChild(fold(c.outro))}
+  $.querySelectorAll('details.fold').forEach(d=>d.addEventListener('click',e=>{if(!d.open||e.target.closest('summary,button,a,input'))return;if(window.getSelection&&window.getSelection().toString())return;d.open=false;d.scrollIntoView({block:'start'})}));
   const cards=[...$.querySelectorAll('.card')];
   const toggle=(cd,open)=>{cards.forEach(x=>{if(x!==cd){x.classList.remove('open');x.querySelector('.cb').hidden=true}});cd.classList.toggle('open',open);cd.querySelector('.cb').hidden=!open;if(open)cd.scrollIntoView({behavior:'smooth',block:'start'})};
   cards.forEach((cd,ix)=>{
@@ -87,5 +88,9 @@ async function chapter(num){
       if(on){toggle(cd,false);if(cards[ix+1])toggle(cards[ix+1],true)}}});
   window.scrollTo(0,0)}
 async function route(){const m=location.hash.match(/#\/ch\/(\d+)/);try{m?await chapter(m[1]):await home()}catch(e){$.innerHTML=head+'<p class="sub">डेटा नहीं खुल पाया। पेज को GitHub Pages (या किसी server) से खोलिए, सीधे फ़ाइल से नहीं।</p>'}}
+const dn=document.getElementById('dn'),upb=document.getElementById('up');
+const navUpd=()=>{const y=window.scrollY,mx=document.documentElement.scrollHeight-window.innerHeight;dn.hidden=mx<300||y>mx-120;upb.hidden=y<200};
+dn.onclick=()=>window.scrollTo({top:document.documentElement.scrollHeight,behavior:'smooth'});upb.onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
+addEventListener('scroll',navUpd,{passive:true});addEventListener('resize',navUpd);new MutationObserver(navUpd).observe(document.getElementById('app'),{childList:true,subtree:true,attributes:true});
 addEventListener('hashchange',route);route();
 </script></body></html>
