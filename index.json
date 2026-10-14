@@ -157,43 +157,43 @@
  },
  {
   "num": "27",
-  "title": "GST E-Way Bill",
-  "part": "",
-  "count": 3
- },
- {
-  "num": "28",
-  "title": "UTGST: केंद्र शासित प्रदेशों में",
-  "part": "",
-  "count": 2
- },
- {
-  "num": "29",
   "title": "Nil Rated, Exempt और Non-GST",
   "part": "",
   "count": 3
  },
  {
-  "num": "30",
+  "num": "28",
   "title": "Composition Scheme",
   "part": "",
   "count": 3
  },
  {
-  "num": "31",
-  "title": "Reverse Charge (RCM) और Import",
-  "part": "",
-  "count": 3
- },
- {
-  "num": "32",
+  "num": "29",
   "title": "GST के साथ Expenses और Assets",
   "part": "",
   "count": 4
  },
  {
-  "num": "33",
+  "num": "30",
+  "title": "Reverse Charge (RCM) और Import",
+  "part": "",
+  "count": 3
+ },
+ {
+  "num": "31",
   "title": "Compensation Cess (Legacy)",
+  "part": "",
+  "count": 3
+ },
+ {
+  "num": "32",
+  "title": "UTGST: केंद्र शासित प्रदेशों में",
+  "part": "",
+  "count": 2
+ },
+ {
+  "num": "33",
+  "title": "GST E-Way Bill",
   "part": "",
   "count": 3
  },
